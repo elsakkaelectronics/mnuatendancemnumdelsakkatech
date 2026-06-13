@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Attendance App — Manager Brief</title>
+  <style>
+    :root{--bg:#020617;--panel:#0f172a;--text:#e2e8f0;--muted:#94a3b8;--accent:#38bdf8;--accent-strong:#7dd3fc;--glass:rgba(255,255,255,0.08);}
+    [data-theme="light"]{--bg:#f8fafc;--panel:#ffffff;--text:#0f172a;--muted:#64748b;--accent:#2563eb;--accent-strong:#60a5fa;--glass:rgba(255,255,255,0.7);}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#0b1124 0%,#020617 42%,#020617 100%);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 80% 10%,rgba(56,189,248,0.18),transparent 24%),radial-gradient(circle at 20% 20%,rgba(59,130,246,0.16),transparent 18%);pointer-events:none;}
+    .wrap{width:min(1140px,calc(100% - 32px));margin:0 auto;padding:32px 0 48px;}
+    header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}
+    .hero{padding:38px;border-radius:32px;background:rgba(15,23,42,0.92);border:1px solid rgba(56,189,248,0.16);box-shadow:0 42px 120px rgba(2,10,31,0.24);backdrop-filter:blur(12px);}
+    [data-theme="light"] .hero{background:rgba(255,255,255,0.94);border-color:rgba(37,99,235,0.18);box-shadow:0 24px 64px rgba(15,23,42,0.12);}
+    .hero h1{font-size:clamp(3rem,4vw,4.4rem);margin:0;line-height:0.95;letter-spacing:-0.05em;}
+    .hero p{margin:20px 0 0;color:var(--muted);font-size:1.05rem;max-width:720px;}
+    .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px;}
+    .pill{padding:16px 18px;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);}
+    .pill strong{display:block;font-size:0.92rem;color:var(--accent-strong);margin-bottom:6px;}
+    .pill span{color:var(--muted);font-size:0.95rem;}
+    .badge{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;background:rgba(56,189,248,0.12);color:var(--accent-strong);font-weight:700;margin-top:18px;}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-strong));color:#fff;font-weight:700;text-decoration:none;border:none;cursor:pointer;}
+    main{display:grid;grid-template-columns:1.2fr 420px;gap:24px;margin-top:34px;}
+    .panel{padding:26px;border-radius:28px;background:rgba(15,23,42,0.92);border:1px solid rgba(56,189,248,0.14);box-shadow:0 28px 70px rgba(2,10,31,0.18);}
+    [data-theme="light"] .panel{background:rgba(255,255,255,0.92);border-color:rgba(37,99,235,0.16);box-shadow:0 18px 40px rgba(15,23,42,0.08);}
+    h2{margin:0 0 12px;font-size:1.2rem;color:var(--text);}
+    .feature{display:grid;grid-template-columns:170px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid rgba(148,163,184,0.1);} .feature:last-child{border-bottom:0;}
+    .feature strong{color:var(--accent-strong);font-weight:700;}
+    ul,ol{margin:0;padding-left:20px;color:var(--muted);}
+    a{color:var(--accent);text-decoration:none;}
+    code{background:var(--glass);padding:4px 8px;border-radius:10px;font-size:0.94rem;}
+    .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px;}
+    .hero-card{padding:22px;border-radius:24px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);animation:drift 7s ease-in-out infinite;}
+    .hero-card h3{margin:0 0 10px;font-size:1rem;color:var(--accent-strong);}
+    .hero-card p{margin:0;color:var(--muted);font-size:0.95rem;}
+    .example pre{margin:0;background:rgba(15,23,42,0.94);color:#eef2ff;padding:18px;border-radius:20px;overflow:auto;border:1px solid rgba(56,189,248,0.14);}
+    footer{margin-top:34px;color:var(--muted);font-size:0.95rem;text-align:center;}
+    .toggle{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);padding:12px 18px;border-radius:999px;color:var(--text);font-weight:700;cursor:pointer;}
+    .cta{margin-top:22px;display:inline-flex;align-items:center;gap:10px;}
+    @keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @media(max-width:1024px){main{grid-template-columns:1fr}} 
+    @media(max-width:760px){header, .hero-grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.cta{flex-direction:column;align-items:flex-start;}}
+  </style>
+  <script>
+    (function(){
+      try {
+        const t = localStorage.getItem('docs-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        const btn = document.getElementById('themeBtn');
+        if(btn) btn.innerText = t === 'dark' ? 'Light' : 'Dark';
+      } catch (e) {}
+      window.toggleDocsTheme = function(){
+        const active = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', active);
+        try { localStorage.setItem('docs-theme', active); } catch (e) {}
+        document.getElementById('themeBtn').innerText = active === 'dark' ? 'Light' : 'Dark';
+      };
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hero">
+        <span class="badge">Built for leaders</span>
+        <h1>Make attendance reporting a competitive advantage.</h1>
+        <p>Convert daily student presence into actionable insight. This app gives managers a clean dashboard, export-ready reports, and a clear absence/dismissal rule designed to keep teams accountable.</p>
+        <div class="summary">
+          <div class="pill"><strong>Fast decisions</strong><span>See absence risk, missed lectures, and dismissal status in one view.</span></div>
+          <div class="pill"><strong>Secure access</strong><span>Bcrypt-protected student login plus admin CSV export.</span></div>
+          <div class="pill"><strong>Real results</strong><span>Track presence with lecture dates and only count past sessions for absences.</span></div>
+        </div>
+        <div class="cta"><a class="btn" href="admin.php">Open admin now</a><button id="themeBtn" class="toggle" onclick="toggleDocsTheme()">Light</button></div>
+      </div>
+      <div class="cta" style="justify-self:flex-end;align-self:start;gap:8px;flex-wrap:wrap;">
+        <span class="pill" style="background:rgba(96,165,250,0.1);color:#7dd3fc;">Manager-first pitch</span>
+        <span class="pill" style="background:rgba(16,185,129,0.12);color:#5eead4;">Ready for review</span>
+      </div>
+    </header>
+    <main>
+      <section class="panel">
+        <div class="hero-grid">
+          <div class="hero-card"><h3>Why your manager will love it</h3><p>Fast enrollment summary, live absence counts, and a dismissal rule tuned to preserve fairness while enforcing accountability.</p></div>
+          <div class="hero-card"><h3>How it earns trust</h3><p>Clear module metrics, per-lecture attendance details, and approved reasons for missed sessions help you explain every decision.</p></div>
+        </div>
+        <div style="margin-top:32px;">
+          <h2>What it includes</h2>
+          <div class="feature"><strong>Student login</strong><div>Password-protected access with stored bcrypt hashes.</div></div>
+          <div class="feature"><strong>Admin control</strong><div>Create modules, add lectures, enroll students, and export attendance CSV.</div></div>
+          <div class="feature"><strong>Attendance tracking</strong><div>Students submit codes + location data, with past lectures counted for absences.</div></div>
+          <div class="feature"><strong>Clear dismissal</strong><div>Dismissed only when absences / total lectures > 25%.</div></div>
+          <div class="feature"><strong>Manager-ready output</strong><div>CSV export includes missed lecture details and attendance totals for quick review.</div></div>
+        </div>
+      </section>
+      <aside class="panel">
+        <h2>Quick route</h2>
+        <ul>
+          <li><a href="signup.php">Signup</a></li>
+          <li><a href="signin.php">Signin</a></li>
+          <li><a href="dashboard.php">Dashboard</a></li>
+          <li><a href="admin.php">Admin</a></li>
+          <li><a href="documentation.php">PHP docs</a></li>
+        </ul>
+        <div style="margin-top:24px;">
+          <h2>Manager pulse</h2>
+          <p class="muted">New hires, module load, and absence rate all flow through a single interface so leadership can stay aligned.</p>
+          <a class="btn" href="admin.php">Show the team</a>
+        </div>
+      </aside>
+    </main>
+    <footer>Designed to make attendance management feel strategic, not manual. Update the copy to match your brand tone.</footer>
+  </div>
+</body>
+</html>
