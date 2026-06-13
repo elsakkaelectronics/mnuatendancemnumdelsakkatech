@@ -1,7 +1,1 @@
-123,Test User,555,a,{"longitude":"1.23","latitude":"4.56"},X1
-123,Test User,555,a,{"longitude":"1.23","latitude":"4.56"},X1
-30230339,Mahmoud Elsakka,01229133287,b,{"longitude":"31.0081024","latitude":"30.7988492"},1234
-123,Test User,555,a,4.56,1.23,X1
-30230339,Mahmoud Elsakka,01229133287,b,30.7988477,31.0080993,12345678
-999,Prime Test,555,a,4.56,1.23,P1
-999,Prime Test,555,a,4.57,1.24,P2
+30230339,Mahmoud Elsakka,126462164126416413,b,30.7988461,31.0081138,12343543

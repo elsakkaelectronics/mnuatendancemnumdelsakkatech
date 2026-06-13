@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Attendance App — Documentation</title>
+  <style>
+    body{font-family:Inter,Arial,Helvetica,sans-serif;max-width:960px;margin:28px auto;padding:20px;color:#0f172a}
+    header{display:flex;justify-content:space-between;align-items:center}
+    h1{margin:0 0 4px;font-size:22px}
+    p.lead{color:#475569}
+    section{background:#fff;border-radius:10px;padding:16px;margin-top:16px;border:1px solid #e6eef8}
+    ul{margin:8px 0 0 20px}
+    a{color:#2563eb}
+    .feature{display:grid;grid-template-columns:140px 1fr;gap:8px 16px;padding:8px 0}
+    code{background:#f3f4f6;padding:2px 6px;border-radius:6px;font-size:90%}
+    .example pre{background:#0b1220;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto}
+    footer{margin-top:20px;color:#64748b;font-size:13px}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Attendance App — Quick Guide</h1>
+      <div class="lead">What it does, where to go, and examples to try.</div>
+    </div>
+    <div style="text-align:right">
+      <small>Repo: mnuatendancemnumdelsakkatech</small>
+    </div>
+  </header>
+
+  <section>
+    <h2>Core Pages</h2>
+    <ul>
+      <li><a href="signup.php">Sign Up</a> — create a student account and enroll in modules (password required).</li>
+      <li><a href="signin.php">Sign In</a> — submit attendance codes (location + code).</li>
+      <li><a href="dashboard.php">Student Dashboard</a> — view your enrolled modules, per-lecture attendance and missed lectures.</li>
+      <li><a href="admin.php">Admin Panel</a> — manage modules, lecture schedules, enroll/unenroll students, export CSV.</li>
+      <li><a href="db.php">Database helpers</a> — central PDO helpers and schema (SQLite).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Features</h2>
+    <div class="feature"><strong>Module CRUD</strong><div>Create modules and lecture schedules with dates (lecture codes stored in <code>lecture_codes</code>).</div></div>
+    <div class="feature"><strong>Student Signup</strong><div>Students register, set a password, and enroll in modules. Passwords are bcrypt-hashed in <code>attendance.password_hash</code>.</div></div>
+    <div class="feature"><strong>Attendance</strong><div>Students submit responses (code + geo). Responses are stored in <code>attendance.responses_json</code> and counted per lecture.</div></div>
+    <div class="feature"><strong>Date-aware</strong><div>Only lectures with a date <= today are counted as "past" for absence tallies; future lectures are shown but not counted as absences.</div></div>
+    <div class="feature"><strong>Dismissal Rule</strong><div>Dismissal is based on absences across all module lectures: dismissed when (absences / total lectures) &gt; 25%. Exact 25% is not dismissed.</div></div>
+    <div class="feature"><strong>CSV Export</strong><div>Admin can export attendance with missed lecture details from the admin panel.</div></div>
+  </section>
+
+  <section>
+    <h2>Examples</h2>
+    <div class="example">
+      <h3>Sign up & submit attendance</h3>
+      <ol>
+        <li>Open <a href="signup.php">signup.php</a> and create a student with academic number <code>2021001</code>, password and enroll in a module (e.g. <code>CORE</code>).</li>
+        <li>As that student, open <a href="signin.php">signin.php</a> and submit a valid lecture code for a module while in range.</li>
+        <li>View <a href="dashboard.php">dashboard.php</a> to see the response listed and whether the lecture is marked attended.</li>
+      </ol>
+      <h3>Admin export</h3>
+      <pre>&lt;Admin &gt; Export CSV → Downloads a file with missed lecture details and counts.</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Troubleshooting & Notes</h2>
+    <ul>
+      <li>If a student is listed as dismissed, check their module <code>total_all</code>, <code>attended_all</code>, and <code>absent_all</code> in the admin details to confirm the absence ratio.</li>
+      <li>Lecture date parsing accepts YYYY-MM-DD; invalid dates are treated as blank (future/past logic depends on stored date).</li>
+      <li>To reset responses: use the admin "Clear responses" action (available in admin panel).</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>Want this page improved? I can add screenshots, sample data seed script, or an export for dismissed students.</div>
+  </footer>
+</body>
+</html>
